@@ -3,9 +3,11 @@
 from os import system
 from os import chdir
 from os import getcwd
+from time import sleep
 #Prerequisites
+#Directory 'Integrity Check' of sorts, just verifies current working directory
 cwd= getcwd()
-if cwd.find('pyos') >= 0:
+if cwd.find('pyOS') >= 0:
     print('\n' * 35)
     print('Welcome to pyOS!')
     print('\n' * 12)
@@ -20,12 +22,16 @@ usrdb= open('users.txt', 'r')
 susrs= open('sudoers.txt', 'r')
 adusr= open('adusr.txt', 'w')
 #Function Definitons
+#Basic login function, built from ground up
 def login():
     usr= input('Enter your username: ')
     pwd= input('Enter your password: ')
     chk= usrdb.readline()
     if chk.find(usr) >= 0:
         if chk.find(pwd) >= 0:
+            print('Welcome')
+            aduser.write(usr)
+            sleep(5)
             main()
         else:
             print('The username or password is incorrect')
@@ -35,6 +41,7 @@ def login():
         print('The username or password is incorrect')
         system('pause')
         login()
+#The main menu for the whole OS. Simple, yet effective
 def main():
     print('\n' * 35)
     print('This is still in aplha! *WIP*')
@@ -43,8 +50,7 @@ def main():
     print('1) File Browser')
     print('2) Apps')
     print('3) Settings')
-    print('4) Logout')
-    print('5) Shutdown...')
+    print('4) Shutdown...')
     sel= input('Make a selection: ')
     if sel == '1':
         print('*WIP*')
@@ -54,11 +60,14 @@ def main():
         system('pause')
         main()
     elif sel == '3':
+        chdir('../')
         system('py oscfg.py')
     elif sel == '4':
-        logout()
-    elif sel == '5':
-        system('py B:\py\poweropt.py')
+        adusr.close()
+        users.close()
+        susrs.close()
+        chdir('../')
+        system('py poweropt.py')
     else:
         print('Invalid Input')
         sel= input('Make a selection: ')
