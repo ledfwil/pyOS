@@ -19,7 +19,7 @@ def usradd():
     pwd= input('Make a secure password: ')
     cpwd= input('Enter the password again to confirm it: ')
     if pwd == cpwd:
-        usrprofile.write(usr + '\t' + pwd)
+        usrdb.write(usr + '\t' + pwd)
         is_su= input('Will this user be an administrator? [Y/N]: ')
         if is_su == 'Y':
             sudoers.write(usr)
@@ -32,21 +32,22 @@ def usradd():
     print('The user was added!')
     main()
     tmp.close()
-    usrprofile.close()
+    usrdb.close()
     remove('users.txt')
     rename('tmp.txt', 'users.txt')
 def usrrm():
-    print('\n' * 35)
-    usrprofile= open('users.txt' , 'r')
+    system('cls')
+    usrdb= open('users.txt' , 'r')
     print("Just a reminder: You can't remove your current user. To do that, use the recovery menu.")
     adusr= open('adusr.txt', 'r')
     ausr= adusr.readline()
     qusr= input('Enter a username: ')
     tmp= open('tmp.txt', 'w')
-    line= usrprofile.readline()
+    line= usrdb.readline()
     if line != '':
         if line.find(qusr) >= 0:
             if qusr == ausr:
+                adusr.close()
                 usrrm()
             confirm= input('Are you sure you want to delete ' + qusr + ' ? [Y/N]')
             if confirm == 'Y':
@@ -61,7 +62,7 @@ def usrrm():
             tmp.write(line)
     else:
         tmp.close()
-        usrprofile.close()
+        usrdb.close()
         remove('users.txt')
         rename('tmp.txt', 'users.txt')
 def chgpwd():
@@ -117,6 +118,6 @@ def main():
 
 #Main Execution
 chkdir()
-usrprofile= open('users.txt', 'a')
+usrdb= open('users.txt', 'a')
 sudoers= open('sudoers.txt', 'a')
 main()

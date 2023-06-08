@@ -8,15 +8,14 @@ from time import sleep
 #Directory 'Integrity Check' of sorts, just verifies current working directory
 cwd= getcwd()
 if cwd.find('pyOS') >= 0:
-    print('\n' * 35)
+    system('cls')
+    print('\n' * 3)
     print('Welcome to pyOS!')
     print('\n' * 12)
 else:
     path= input('Enter the path to pyOS: ')
     chdir(path)
-    print('\n' * 35)
-    print('Welcome to pyOS!')
-    print('\n' * 12)
+    system('cls')
 chdir('UserDB')
 usrdb= open('users.txt', 'r')
 susrs= open('sudoers.txt', 'r')
@@ -27,25 +26,30 @@ def login():
     usr= input('Enter your username: ')
     pwd= input('Enter your password: ')
     chk= usrdb.readline()
-    if chk.find(usr) >= 0:
-        if chk.find(pwd) >= 0:
-            print('Welcome')
-            aduser.write(usr)
-            sleep(5)
-            main()
+    if usr != 'admin':
+        if chk.find(usr) >= 0:
+            if chk.find(pwd) >= 0:
+                print('Welcome')
+                adusr.write(usr)
+                sleep(5)
+                print('This is still in aplha! *WIP*')
+                system('pause')
+                main()
+            else:
+                print('The username or password is incorrect')
+                system('pause')
+                login()
         else:
             print('The username or password is incorrect')
             system('pause')
             login()
     else:
-        print('The username or password is incorrect')
+        print('The admin account cannot be used in the normal OS. Try another account')
         system('pause')
         login()
 #The main menu for the whole OS. Simple, yet effective
 def main():
-    print('\n' * 35)
-    print('This is still in aplha! *WIP*')
-    system('pause')
+    system('cls')
     print('\t' + 'Main Menu')
     print('1) File Browser')
     print('2) Apps')
@@ -53,7 +57,9 @@ def main():
     print('4) Shutdown...')
     sel= input('Make a selection: ')
     if sel == '1':
+        #It is unknown if by some miracle I can think of a way to make this work, but most likely will be seperate script
         print('*WIP*')
+        system('pause')
         system('explorer')
     elif sel == '2':
         print('*WIP*')
@@ -61,15 +67,18 @@ def main():
         main()
     elif sel == '3':
         chdir('../')
+        chdir('Systempy')
         system('py oscfg.py')
     elif sel == '4':
         adusr.close()
-        users.close()
+        usrdb.close()
         susrs.close()
         chdir('../')
+        chdir('Systempy')
         system('py poweropt.py')
     else:
         print('Invalid Input')
-        sel= input('Make a selection: ')
+        system('pause')
+        main()
 #Main Execution        
 login()
