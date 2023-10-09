@@ -11,30 +11,35 @@ def chkdir():
             print('Accessing User Database...')
         else:
             chdir('UserDB')
+            chkdir()
     else:
         path= input('Enter the path to pyOS: ')
         chdir(path)
+        chkdir()
 def usradd():
     usr= input('Enter a username: ')
     pwd= input('Make a secure password: ')
     cpwd= input('Enter the password again to confirm it: ')
-    if pwd == cpwd:
-        usrdb.write(usr + '\t' + pwd)
-        is_su= input('Will this user be an administrator? [Y/N]: ')
-        if is_su == 'Y':
-            sudoers.write(usr)
-            print('Users added to sudoers file.')
-        else:
-            print('User has not been aded to sudoers file.')
+    pwdchk(pwd, cpwd)
+    is_su= input('Will this user be an administrator? [Y/N]: ')
+    if is_su == 'Y':
+        sudoers.write(usr)
+        print('Users added to sudoers file.')
     else:
-        pwd= input("The passswords didn't match. Try again. ")
-        cpwd= input('Confirm it: ')
+        print('User has not been aded to sudoers file.')
     print('The user was added!')
     main()
     tmp.close()
     usrdb.close()
     remove('users.txt')
     rename('tmp.txt', 'users.txt')
+def pwdchk(pwd, cpwd):
+    if pwd == cpwd:
+        usrdb.write(usr + '\t' + pwd)
+    else:
+        pwd= input("The passswords didn't match. Try again. ")
+        cpwd= input('Confirm it: ')
+        pwdchk(pwd, cpwd)
 def usrrm():
     system('cls')
     usrdb= open('users.txt' , 'r')
@@ -76,20 +81,13 @@ def chgpwd():
         cpwd= input('Confirm it: ')
         if pwd == cpwd:
             tmp.write(adusr + '\t' + pwd)
+            print('Password changed sucessfully!')
         else:
             pwd= input("The passswords didn't match. Try again. ")
             cpwd= input('Confirm it: ')
-            if pwd == cpwd:
-                tmp.write(adusr + '\t' + pwd)
-                print('Password changed sucessfully!')
-                tmp.close()
-                users.close()
-                rename('tmp.txt', 'users.txt')
-                main()
-            else:
-                pwd= input("The passswords didn't match. Try again. ")
-                cpwd= input('Confirm it: ')
-                tmp.write(adusr + '\t' + pwd)                    
+            pwdchk(pwd, cpwd)
+            tmp.write(adusr + '\t' + pwd)
+            print('Password changed sucessfully!')
             tmp.close()
             users.close()
             rename('tmp.txt', 'users.txt')

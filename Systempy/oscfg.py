@@ -8,7 +8,7 @@ def dirchk():
     cwd= getcwd()
     if cwd.find('pyOS') >=0:
         if cwd.find('UserDB') >= 0:
-            continue
+            return
         chdir('UserDB')
         dirchk()
     path= input("Enter the path to pyOS on the system's primary hard disk: ")
@@ -21,8 +21,8 @@ def login():
         return
     else:
         print('The password is incorrect')
-            system('pause')
-            login()
+        system('pause')
+        login()
 def main():
     system('cls')
     print('\t' + 'Settings')
@@ -32,10 +32,10 @@ def main():
     opt= input('Make a selection: ')
     if opt == '1':
         system('py pyosusrmgr.py')
+        main()
     elif opt == '2':
         print('*WIP*')
         system('pause')
-        system('cls')
         main()
     elif opt == '3':
         login()
