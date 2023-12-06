@@ -1,1 +1,1 @@
-admin	password
+admin  b'cGFzc3dvcmQ='

@@ -3,6 +3,7 @@ from os import chdir
 from os import getcwd
 from os import system
 from time import sleep
+from base64 import b64encode
 #Function Definition
 def dirchk():
     cwd= getcwd()
@@ -11,36 +12,56 @@ def dirchk():
             return
         chdir('UserDB')
         dirchk()
-    path= input("Enter the path to pyOS on the system's primary hard disk: ")
-    chdir(path)
-    dirchk()
-def login():
+    else:    
+        path= input("Enter the path to pyOS on the system's primary hard disk: ")
+        chdir(path)
+        dirchk()
+    return
+def login(a):
+    if a != 0:
+        chdir('../')
+        dirchk()
+    usrdb= open('users.txt', 'r')
     pwd= input('Enter the password for account "admin": ')
+    epwd= str(b64encode(bytes(pwd, 'utf-8')))
     chk= usrdb.readline()
-    if chk.find(pwd) >= 0:
+    if chk.find(epwd) >= 0:
         return
     else:
         print('The password is incorrect')
         system('pause')
-        login()
-def main():
+        login(0)
+def menu():
+    print(getcwd())
+    chdir('../')
+    chdir('Systempy')
     system('cls')
     print('\t' + 'Settings')
     print('1) User Management')
     print('2) System Management')
     print('3) Recovery')
+    print('4) Exit')
     opt= input('Make a selection: ')
     if opt == '1':
         system('py pyosusrmgr.py')
-        main()
+        menu()
     elif opt == '2':
-        print('*WIP*')
-        system('pause')
-        main()
+        system('py compmgmt.py')
+        menu()
     elif opt == '3':
-        login()
+        login(1)
+        chdir('../')
+        chdir('Systempy')       
         system('py recovery.py')
+        menu()
+    elif opt == '4':
+        exit()
+    else:
+        menu()
         
 #Main Execution
-usrdb= open('users.txt', 'r')
+def main():
+    dirchk()
+    login(0)
+    menu()
 main()
