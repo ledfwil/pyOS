@@ -60,7 +60,6 @@ def main():
         #It is unknown if by some miracle I can think of a way to make this work, but most likely will be seperate script
         print('*WIP*')
         system('pause')
-        system('explorer')
     elif sel == '2':
         print('*WIP*')
         system('pause')
