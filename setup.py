@@ -65,7 +65,7 @@ def copy(a):
     header()
     #After Setup completes, restart the computer
     print('Setup wiil restart your computer in 10 seconds')
-    sleep(5)
+    sleep(10)
     system('shutdown /r')
 #The actual setup, similar to XP-era and older Windows Setup programs, but no blue background
 def Setup():
