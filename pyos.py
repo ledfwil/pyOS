@@ -4,6 +4,7 @@ from os import system
 from os import chdir
 from os import getcwd
 from time import sleep
+from base64 import b64encode
 #Prerequisites
 #Directory 'Integrity Check' of sorts, just verifies current working directory
 cwd= getcwd()
@@ -25,10 +26,17 @@ adusr= open('adusr.txt', 'w')
 def login():
     usr= input('Enter your username: ')
     pwd= input('Enter your password: ')
+    bpwd = b64encode(pwd.encode())
     chk= usrdb.readline()
+    if chk.find(usr) >= 0:
+        resume
+    else: 
+        chk = usrdb.readline()
+    qchk = chk.replace('\t', '')
+    bchk = qchk.replace(usr, '')
     if usr != 'admin':
         if chk.find(usr) >= 0:
-            if chk.find(pwd) >= 0:
+            if bpwd:
                 print('Welcome')
                 adusr.write(usr)
                 sleep(5)

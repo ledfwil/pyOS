@@ -3,6 +3,7 @@ from os import getcwd
 from os import chdir
 from os import rename
 from os import remove
+from base64 import b64encode
 #Funciton Definition
 def chkdir():
     cwd= getcwd()
@@ -27,15 +28,12 @@ def usradd():
         print('Users added to sudoers file.')
     else:
         print('User has not been aded to sudoers file.')
-    print('The user was added!')
     main()
-    tmp.close()
-    usrdb.close()
-    remove('users.txt')
-    rename('tmp.txt', 'users.txt')
+    print('The user was added!')
 def pwdchk(pwd, cpwd):
     if pwd == cpwd:
-        usrdb.write(usr + '\t' + pwd)
+        bpwd = b64encode(pwd.encode())
+        usrdb.write(usr + '\t' + bpwd)
     else:
         pwd= input("The passswords didn't match. Try again. ")
         cpwd= input('Confirm it: ')
