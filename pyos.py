@@ -5,7 +5,6 @@ from os import chdir
 from os import getcwd
 from time import sleep 
 import login
-#Test
 #Prerequisites
 #Directory 'Integrity Check' of sorts, just verifies current working directory
 def dirchk():
