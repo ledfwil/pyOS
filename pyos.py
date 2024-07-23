@@ -1,52 +1,30 @@
-#Welcome to the passion porject of a script! Let's hope this works...
+#Welcome to the passion project of a crazy idea! Let's hope this works...
 #Imports
 from os import system
 from os import chdir
 from os import getcwd
-from time import sleep
+from time import sleep 
+import login
 #Prerequisites
 #Directory 'Integrity Check' of sorts, just verifies current working directory
-cwd= getcwd()
-if cwd.find('pyOS') >= 0:
-    system('cls')
-    print('\n' * 3)
-    print('Welcome to pyOS!')
-    print('\n' * 12)
-else:
-    path= input('Enter the path to pyOS: ')
-    chdir(path)
-    system('cls')
-chdir('UserDB')
-usrdb= open('users.txt', 'r')
-susrs= open('sudoers.txt', 'r')
-adusr= open('adusr.txt', 'w')
-#Function Definitons
-#Basic login function, built from ground up
-def login():
-    usr= input('Enter your username: ')
-    pwd= input('Enter your password: ')
-    chk= usrdb.readline()
-    if usr != 'admin':
-        if chk.find(usr) >= 0:
-            if chk.find(pwd) >= 0:
-                print('Welcome')
-                adusr.write(usr)
-                sleep(5)
-                print('This is still in aplha! *WIP*')
-                system('pause')
-                main()
-            else:
-                print('The username or password is incorrect')
-                system('pause')
-                login()
-        else:
-            print('The username or password is incorrect')
-            system('pause')
-            login()
+def dirchk():
+    cwd= getcwd()
+    if cwd.find('UserDB') < 0 | cwd.find('Systempy') < 0:
+        chdir('../')
+        dirchk()
+    elif cwd.find('pyOS') >= 0:
+        system('cls')
+        print('\n' * 3)
+        print('Welcome to pyOS!')
+        print('\n' * 12)
+        sleep(2)
+        login.login()
     else:
-        print('The admin account cannot be used in the normal OS. Try another account')
-        system('pause')
-        login()
+        path= input('Enter the path to pyOS: ')
+        chdir(path)
+        system('cls')
+        dirchk()
+#Function Definitons
 #The main menu for the whole OS. Simple, yet effective
 def main():
     system('cls')
@@ -80,4 +58,5 @@ def main():
         system('pause')
         main()
 #Main Execution        
-login()
+dirchk()
+main()
