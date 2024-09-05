@@ -27,9 +27,9 @@ def instup(a):
     dst= verify(a)
     src= input('Enter the path to installation media: ')
     chdir(dst)
-    dstc= dst + "/UserDB"
-    dstu= dst + '/Users'
-    stmp= src + '/tmp'
+    dstc= dst + "\\UserDB"
+    dstu= dst + '\\Users'
+    stmp= src + '\\tmp'
     stmpy= sub('pyOS', '', stmp)
     stmpu= stmpy + 'Users'
     stmpdb= stmpy + 'UserDB'
@@ -62,11 +62,6 @@ def copy(a):
         output = e.output    
     #Setup cleanup
     chdir(dst)
-    header()
-    #After Setup completes, restart the computer
-    print('Setup wiil restart your computer in 10 seconds')
-    sleep(10)
-    system('shutdown /r')
 #The actual setup, similar to XP-era and older Windows Setup programs, but no blue background
 def Setup():
     header()
@@ -76,7 +71,7 @@ def Setup():
     header()
     print('\n')
     path= input('Enter the path where you would like the OS to be installed(excluding pyOS): ')
-    dpath= path + 'pyOS'
+    dpath= path + '\\pyOS'
     header()
     print('Setup will create an account called admin that can be used to access the system in the event a system recovery is needed')
     apwd= input('Enter a secure password for the account: ')
@@ -137,6 +132,12 @@ def Setup():
     users.write('admin' + '\t' + apwd)
     users.write(usrnm + '\t' + pwd)
     users.close()
+    system('cls')
+    header()
+    #After Setup completes, restart the computer
+    print('Setup wiil restart your computer in 10 seconds')
+    sleep(10)
+    system('shutdown /r')
 #The Setup Header
 def header():
     system('cls')
