@@ -39,6 +39,7 @@ def main():
         print('*WIP*')
         system('pause')
     elif sel == '2':
+        system('cls')
         print('*WIP*')
         system('pause')
         main()
