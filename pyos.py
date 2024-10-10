@@ -9,6 +9,8 @@ import login
 #Directory 'Integrity Check' of sorts, just verifies current working directory
 def dirchk():
     cwd= getcwd()
+    print(cwd)
+    system("pause")
     if cwd.find('UserDB') < 0 | cwd.find('Systempy') < 0:
         chdir('../')
         dirchk()
@@ -42,6 +44,20 @@ def main():
         system('cls')
         print('*WIP*')
         system('pause')
+        system('cls')
+        print('Apps List')
+        print("No apps installed, maybe we'll get some one day...")
+        yeetus= input("Do you have any apps on hand? [y/n]: ")
+        if yeetus == 'y':
+            print("Alright! We'll have to modify the main script in a future commit for base apps?")
+            print("External Installed Apps will be in a separate script that will have categories")
+            print("However, that'll be a project for another day.")
+            print("*WIP*")
+            system('pause')
+        if yeetus == 'n':
+            print("Makes sense. I get it. Don't worry, some apps will come bundled eventually.")
+            print("*WIP*")
+            system('pause')
         main()
     elif sel == '3':
         chdir('../')
