@@ -1,4 +1,2 @@
-UserDB/adusr.txt
-UserDB/users.txt
+UserDB/*.txt
 __pycache__/login.cpython-312.pyc
-UserDB/users.txt
