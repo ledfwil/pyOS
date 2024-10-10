@@ -25,7 +25,6 @@ def login():
     usr= str(input('Enter your username: '))
     pwd= getpass.getpass('Enter your password: ')
     cpwd= b64encode(bytes(pwd, "utf-8"))
-    chk= verify(usrdb, usr, False, "null")
     if usr != 'admin':
         for i in psk_db.keys():
             if usr == i:
@@ -34,4 +33,10 @@ def login():
                     print(Welcome)
                     sleep(5)
                     chdir('..\\')
-login()
+    else:
+        print('admin account cannot be used in normal OS. Please choose another account')
+        login()
+    adusr.write(usr)
+    usrdb.close()
+    susrs.close()
+    adusr.close() 

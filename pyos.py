@@ -9,18 +9,13 @@ import login
 #Directory 'Integrity Check' of sorts, just verifies current working directory
 def dirchk():
     cwd= getcwd()
-    print(cwd)
-    system("pause")
     if cwd.find('UserDB') < 0 | cwd.find('Systempy') < 0:
         chdir('../')
         dirchk()
     elif cwd.find('pyOS') >= 0:
         system('cls')
-        print('\n' * 3)
         print('Welcome to pyOS!')
-        print('\n' * 12)
         sleep(2)
-        login.login()
     else:
         path= input('Enter the path to pyOS: ')
         chdir(path)
@@ -64,9 +59,6 @@ def main():
         chdir('Systempy')
         system('py oscfg.py')
     elif sel == '4':
-        adusr.close()
-        usrdb.close()
-        susrs.close()
         chdir('../')
         chdir('Systempy')
         system('py poweropt.py')
@@ -76,4 +68,5 @@ def main():
         main()
 #Main Execution        
 dirchk()
+adusr= login.login()
 main()
