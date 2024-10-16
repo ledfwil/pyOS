@@ -44,8 +44,9 @@ def main():
         print("No apps installed, maybe we'll get some one day...")
         yeetus= input("Do you have any apps on hand? [y/n]: ")
         if yeetus == 'y':
-            print("Alright! We'll have to modify the main script in a future commit for base apps?")
-            print("External Installed Apps will be in a separate script that will have categories")
+            print("Alright! We'll have to modify the main script in a future commit for base apps.")
+            print("External Installed Apps will be in a separate script that will have categories.")
+            print('mayhaps.')
             print("However, that'll be a project for another day.")
             print("*WIP*")
             system('pause')

@@ -6,21 +6,52 @@ from os import getcwd
 from time import sleep
 import getpass
 def db_create(usrdb):
-    db= usrdb
     psk_db= dict()
-    usr= db.readline()
-    psk= db.readline()
+    usr= usrdb.readline()
+    psk= usrdb.readline()
+    if usr != "admin":
+        print("heyo! Seems the admin account is missing. You'll have to make it")
+        print('Launching admin account recovery...')
+        sleep(2)
+        chdir('..\\')
+        chdir('Systempy')
+        system('py adminrecover.py')
+        exit()
+    elif usr == "" or psk == "":
+        print("heyo! Seems we've got some missing info in the login files")
+        print('Going to user management menu... (Choose option 1 when you get to the menu)')
+        system('pause')
+        chdir('..\\')
+        chdir('Systempy')
+        system('py pyosusrmgr.py')
+        exit()
     while usr != '':
         psk_db.update({usr:psk})
         usr= db.readline()
         psk= db.readline()
     return psk_db
 def login():
-    if getcwd().find('UserDB') < 0:
-        chdir('UserDB')
-    usrdb= open('users.txt', 'r')
-    susrs= open('sudoers.txt', 'r')
-    adusr= open('adusr.txt', 'w')
+    cwd= getcwd()
+    print(cwd)
+    while cwd.find('UserDB') < 0:
+        try:
+            if cwd.find('UserDB') < 0:
+                chdir('UserDB')
+        except FileNotFoundError as e:
+            print("heyo! Some shit's aint here or bugged.")
+            print(f"{e} \n is what broke.")
+            exit()
+    try:
+        usrdb= open('users.txt', 'r')
+        susrs= open('sudoers.txt', 'r')
+        adusr= open('adusr.txt', 'w')
+    except FileNotFoundError:
+        print("heyo! Seems we've got some missing files related to login info")
+        print('Going to user management menu... (Choose option 1 when you get to the menu)')
+        system('pause')
+        chdir('..\\')
+        chdir('Systempy')
+        system('py pyosusrmgr.py')
     psk_db = db_create(usrdb)
     usr= str(input('Enter your username: '))
     pwd= getpass.getpass('Enter your password: ')
@@ -40,3 +71,4 @@ def login():
     usrdb.close()
     susrs.close()
     adusr.close() 
+login()

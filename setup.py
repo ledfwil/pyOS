@@ -6,6 +6,8 @@ from subprocess import check_output
 import subprocess
 from time import sleep
 from re import sub
+import getpass
+from base64 import b64encode
 #Function Definition
 #Directory Verification
 def verify(dir):
@@ -74,52 +76,19 @@ def Setup():
     dpath= path + '\\pyOS'
     header()
     print('Setup will create an account called admin that can be used to access the system in the event a system recovery is needed')
-    apwd= input('Enter a secure password for the account: ')
-    capwd= input('Comfirm it: ')
+    apwd= getpass.getpass('Enter a secure password for the account: ')
+    capwd= getpass.getpass('Comfirm it: ')
     #Password confirmnation for this admin account is key, so input validation is necessary.
-    if apwd != capwd:
-        print("Those passwords didn't match. Try again.")
-        apwd= input('Enter a secure password for the account: ')
-        capwd= input('Comfirm it: ')
-        if apwd != capwd:
-            print("Those passwords didn't match. Try again.")
-            apwd= input('Enter a secure password for the account: ')
-            capwd= input('Comfirm it: ')
-            if apwd != capwd:
-                print("Those passwords didn't match. Try again.")
-                apwd= input('Enter a secure password for the account: ')
-                capwd= input('Comfirm it: ')
-                #After 3 attempts, Setup closes with the error: Too many failed attempts
-                if apwd != capwd:
-                    header()
-                    print('Setup has been aborted due to too many incorrect password attempts for creating account: admin')
-                    system('pause')
-                    exit()
+    while apwd != capwd:
+        apwd= getpass.getpass("The passwords didn't match. Try again. ")
+        capwd= getpass.getpass("Confirm it: ")
     #User database file writing
     else:
         header()
         print('Setup is going to create a user account for you to use')
         usrnm= input('Enter your username: ')
-        pwd= input('Enter a secure password: ')
-        cpwd= input('Confirm it: ')
-        if pwd != cpwd:
-            print("Those passwords didn't match. Try again.")
-            pwd= input('Enter a secure password for the account: ')
-            apwd= input('Comfirm it: ')
-            if pwd != cpwd:
-                print("Those passwords didn't match. Try again.")
-                pwd= input('Enter a secure password for the account: ')
-                apwd= input('Comfirm it: ')
-                if pwd != cpwd:
-                    print("Those passwords didn't match. Try again.")
-                    pwd= input('Enter a secure password for the account: ')
-                    cpwd= input('Comfirm it: ')
-                    #After 3 attempts, Setup closes with the error: Too many failed attempts
-                    if pwd != cpwd:
-                        header()
-                        print('Setup has been aborted due to too many incorrect password attempts for creating account: {usrnm} ')
-                        system('pause')
-                        exit()        
+        pwd= getpass.getpass("Enter a secure password: ")
+        cpwd= getpass.getpass("Confirm it: ")
     header()
     print('Setup is now ready to copy the OS files to your computer')
     print('Your computer will restart after the file copy process is complete')
@@ -127,10 +96,11 @@ def Setup():
     print('Copying files...')
     #The setup copy begins...
     copy(dpath)
+    chdir(dpath)
     chdir('UserDB')
     users= open('users.txt', 'w')
-    users.write('admin' + '\t' + apwd)
-    users.write(usrnm + '\t' + pwd)
+    users.write('admin' + '\n' + str(b64encode(bytes(apwd, "utf-8"))))
+    users.write(usrnm + '\n' + str(b64encode(bytes(pwd, "utf-8"))))
     users.close()
     system('cls')
     header()

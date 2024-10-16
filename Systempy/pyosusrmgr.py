@@ -3,46 +3,60 @@ from os import getcwd
 from os import chdir
 from os import rename
 from os import remove
+from os import system
 from base64 import b64encode
+import getpass
 #Funciton Definition
-def chkdir():
-    cwd= getcwd()
-    if cwd.find('pyos') >= 0:
-        if cwd.find('UserDB') >= 0:
-            print('Accessing User Database...')
+def sudochk(usr, sudoers):
+    susr= sudoers.readline()
+    while susr != '':
+        if susr != usr:
+            susr= sudoers.readline()
         else:
-            chdir('UserDB')
-            chkdir()
+            print('Your user account is not permitted to do this action')
+            system('pause')    
+def dirchk():
+    cwd= getcwd()
+    if cwd.find('Systempy') != -1:
+        chdir('../')
+        dirchk()
+    elif cwd.find('pyOS') >= 0:
+        chdir('UserDB')
     else:
         path= input('Enter the path to pyOS: ')
         chdir(path)
-        chkdir()
-def usradd():
+        system('cls')
+        dirchk()
+def usradd(sudoers, userdb):
     usr= input('Enter a username: ')
-    pwd= input('Make a secure password: ')
-    cpwd= input('Enter the password again to confirm it: ')
-    pwdchk(pwd, cpwd)
+    pwd= getpass.getpass('Make a secure password: ')
+    cpwd= getpass.getpass('Enter the password again to confirm it: ')
+    pwdchk(pwd, cpwd, usr, userdb)
     is_su= input('Will this user be an administrator? [Y/N]: ')
-    if is_su == 'Y':
+    if is_su == 'Y' or is_su == 'y':
         sudoers.write(usr)
         print('Users added to sudoers file.')
     else:
         print('User has not been aded to sudoers file.')
-    main()
     print('The user was added!')
-def pwdchk(pwd, cpwd):
-    if pwd == cpwd:
-        bpwd = b64encode(pwd.encode())
-        usrdb.write(usr + '\t' + bpwd)
-    else:
-        pwd= input("The passswords didn't match. Try again. ")
-        cpwd= input('Confirm it: ')
-        pwdchk(pwd, cpwd)
-def usrrm():
+def pwdchk(pwd, cpwd, usr, userdb):
+    while True:
+        if pwd == cpwd:
+            bpwd = b64encode(pwd.encode())
+            usrdb.write('\n' + usr + '\n')
+            usrdb.write(str(bpwd))
+            pass
+            break
+        else:
+            pwd= getpass.getpass("The passswords didn't match. Try again. ")
+            cpwd= getpass.getpass('Confirm it: ')
+            pwdchk(pwd, cpwd)
+def usrrm(adusr):
     system('cls')
     usrdb= open('users.txt' , 'r')
-    print("Just a reminder: You can't remove your current user. To do that, use the recovery menu.")
-    adusr= open('adusr.txt', 'r')
+    print("Just a reminder: You can't remove your current user (should it be the only user account).") 
+    print("To do that, create a new user with sufficient permissions, then use them to delete this account.")
+    system('pause')
     ausr= adusr.readline()
     qusr= input('Enter a username: ')
     tmp= open('tmp.txt', 'w')
@@ -53,9 +67,10 @@ def usrrm():
                 adusr.close()
                 usrrm()
             confirm= input('Are you sure you want to delete ' + qusr + ' ? [Y/N]')
-            if confirm == 'Y':
+            if confirm == 'Y' or confirm == 'y':
                 print('User Removed')
-            elif confrim == 'N':
+                usrdb.readline()
+            elif confrim == 'N' or confirm == 'n':
                 print('User retained')
                 tmp.write(line)
             else:
@@ -68,52 +83,47 @@ def usrrm():
         usrdb.close()
         remove('users.txt')
         rename('tmp.txt', 'users.txt')
-def chgpwd():
-    ausr= open('adusr.txt', 'r')
+def chgpwd(ausr):
     adusr= ausr.readline()
     tmp= open('tmp.txt', 'w')
     users= open('users.txt', 'r')
     line= users.readline()
     if line.find(adusr) >= 0:
-        pwd= input('Enter your new password: ')
-        cpwd= input('Confirm it: ')
-        if pwd == cpwd:
-            tmp.write(adusr + '\t' + pwd)
-            print('Password changed sucessfully!')
-        else:
-            pwd= input("The passswords didn't match. Try again. ")
-            cpwd= input('Confirm it: ')
-            pwdchk(pwd, cpwd)
-            tmp.write(adusr + '\t' + pwd)
-            print('Password changed sucessfully!')
-            tmp.close()
-            users.close()
-            rename('tmp.txt', 'users.txt')
-            main()
+        pwd= getpass.getpass('Enter your new password: ')
+        cpwd= getpass.getpass('Confirm it: ')
+        pwdchk(pwd, cpwd, adusr)
+        tmp.write(adusr + '\n' )
+        tmp.write(b64.encode(pwd))
+        print('Password changed sucessfully!')
+        tmp.close()
+        users.close()
+        rename('tmp.txt', 'users.txt')
     elif line != '':
         tmp.write(line)
         line= users.readline()
-def main():
-    print('Please Select an Option')
-    print('1) Add a User')
-    print('2) Remove a User')
-    print('3) Change Your Password')
-    print('4) Exit')
-    option= input('Selection: ')
-    if option == '1':
-        usradd()
-    elif option == '2':
-        usrrm()
-    elif option == '3':
-        chgpwd()
-    elif option == '4':
-        exit()
-    else:
-        print('Invalid Input')
-        option= input('Make a selection')
-
+def main(sudoers, adusr, usrdb):
+    while True:
+        print('Please Select an Option')
+        print('1) Add a User')
+        print('2) Remove a User')
+        print('3) Change Your Password')
+        print('4) Exit')
+        option= input('Selection: ')
+        if option == '1':
+            usradd(sudoers, usrdb)
+        elif option == '2':
+            sudochk(adusr, sudoers)
+            usrrm(adusr)
+        elif option == '3':
+            chgpwd(adusr)
+        elif option == '4':
+            exit()
+        else:
+            print('Invalid Input')
+            option= input('Make a selection')
 #Main Execution
-chkdir()
+dirchk()
 usrdb= open('users.txt', 'a')
 sudoers= open('sudoers.txt', 'a')
-main()
+adusr= open('adusr.txt', 'r')
+main(sudoers, adusr, usrdb)
