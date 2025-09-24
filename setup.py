@@ -139,7 +139,9 @@ def main():
             mkdir("UserDB")
         except FileExistsError:
             print("It's already made.")
+            print("run adminrecover.py after exit")
             exit()
+        print("run adminrecover.py after exit")
     elif opt == '5':
         print('Remove the installation media, and press ENTER: ')
         input()
