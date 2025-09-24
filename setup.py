@@ -120,7 +120,8 @@ def main():
     print('1) Update an existing install of pyOS')
     print('2) Install pyOS')
     print('3) pyOS Recovery')
-    print('4) Exit Setup')
+    print('4) Development Config')
+    print('5) Exit Setup')
     opt= input('Make a selection: ')
     if opt == '1':
         path= input('Enter the path to pyOS on this computer: ')
@@ -134,6 +135,12 @@ def main():
         chdir('Systempy')
         system('py recovery.py')
     elif opt == '4':
+        try:
+            mkdir("UserDB")
+        except FileExistsError:
+            print("It's already made.")
+            exit()
+    elif opt == '5':
         print('Remove the installation media, and press ENTER: ')
         input()
         system('shutdown /r /f /t 0')

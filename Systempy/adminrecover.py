@@ -28,7 +28,7 @@ def pwdchk(pwd, cpwd, usr, usrdb):
         else:
             pwd= getpass.getpass("The passswords didn't match. Try again. ")
             cpwd= getpass.getpass('Confirm it: ')
-            pwdchk(pwd, cpwd)
+            pwdchk(pwd, cpwd, usr, usrdb)
 def main():
     dirchk()
     usr= "admin"
