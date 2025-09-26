@@ -9,6 +9,7 @@ def db_create(usrdb):
     psk_db= dict()
     usr= usrdb.readline()
     psk= usrdb.readline()
+    usr= usr.replace('\n', '')
     if usr != "admin":
         print("heyo! Seems the admin account is missing. You'll have to make it")
         print('Launching admin account recovery...')
@@ -27,8 +28,18 @@ def db_create(usrdb):
         exit()
     while usr != '':
         psk_db.update({usr:psk})
-        usr= db.readline()
-        psk= db.readline()
+        usr= usrdb.readline()
+        usr= usr.replace('\n', '')       
+        psk= usrdb.readline()
+        if usr or psk == '':
+            if len(psk_db) > 2:
+                print("heyo! Seems we've got some missing info in the login files")
+                print('Going to user management menu... (Choose option 1 when you get to the menu)')
+                system('pause')
+                chdir('..\\')
+                chdir('Systempy')
+                system('py pyosusrmgr.py')
+                exit()
     return psk_db
 def login():
     cwd= getcwd()
@@ -37,6 +48,7 @@ def login():
         try:
             if cwd.find('UserDB') < 0:
                 chdir('UserDB')
+                cwd=getcwd()
         except FileNotFoundError as e:
             print("heyo! Some shit's aint here or bugged.")
             print(f"{e} \n is what broke.")
@@ -52,6 +64,7 @@ def login():
         chdir('..\\')
         chdir('Systempy')
         system('py pyosusrmgr.py')
+        exit()
     psk_db = db_create(usrdb)
     usr= str(input('Enter your username: '))
     pwd= getpass.getpass('Enter your password: ')
@@ -59,9 +72,9 @@ def login():
     if usr != 'admin':
         for i in psk_db.keys():
             if usr == i:
-                while (psk_db.get(i)).find(cpwd) != -1:
+                while (psk_db.get(str(i))).find(str(cpwd)) != -1:
                     system('cls')
-                    print(Welcome)
+                    print("Welcome")
                     sleep(5)
                     chdir('..\\')
     else:

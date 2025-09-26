@@ -19,12 +19,13 @@ def dirchk():
         system('cls')
         dirchk()
 def pwdchk(pwd, cpwd, usr, usrdb):
-    while True:
+    complete= 0
+    while complete == 0:
         if pwd == cpwd:
             bpwd = b64encode(bytes(pwd, "utf-8"))
             usrdb.write(usr + '\n')
-            usrdb.write(bpwd)
-            pass
+            usrdb.write(str(bpwd))
+            complete= 1
         else:
             pwd= getpass.getpass("The passswords didn't match. Try again. ")
             cpwd= getpass.getpass('Confirm it: ')
@@ -43,4 +44,7 @@ def main():
     else:
         print('User has not been aded to sudoers file.')
     print('admin account recovered')
+    usrdb.write(usr + '\n' + pwd)
+    usrdb.close()
+    sudoers.close()
 main()    
