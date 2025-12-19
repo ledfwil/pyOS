@@ -4,6 +4,7 @@ from base64 import b64encode
 from base64 import b64decode
 from os import getcwd
 from time import sleep
+from hashlib import sha256
 import getpass
 def db_create(usrdb):
     psk_db= dict()
@@ -68,11 +69,11 @@ def login():
     psk_db = db_create(usrdb)
     usr= str(input('Enter your username: '))
     pwd= getpass.getpass('Enter your password: ')
-    cpwd= b64encode(bytes(pwd, "utf-8"))
+    cpwd= sha256(b64encode(bytes(pwd, "utf-8")))
     if usr != 'admin':
         for i in psk_db.keys():
             if usr == i:
-                while (psk_db.get(str(i))).find(str(cpwd)) != -1:
+                while (psk_db.get(str(i))).find(str(cpwd.hexdigest())) != -1:
                     system('cls')
                     print("Welcome")
                     sleep(5)

@@ -5,6 +5,7 @@ from os import remove
 from os import system
 from base64 import b64encode
 import getpass
+from hashlib import sha256
 def dirchk():
     cwd= getcwd()
     if cwd.find('Systempy') != -1:
@@ -22,9 +23,9 @@ def pwdchk(pwd, cpwd, usr, usrdb):
     complete= 0
     while complete == 0:
         if pwd == cpwd:
-            bpwd = b64encode(bytes(pwd, "utf-8"))
+            bpwd = sha256(b64encode(bytes(pwd, "utf-8")))
             usrdb.write(usr + '\n')
-            usrdb.write(str(bpwd))
+            usrdb.write(str(bpwd.hexdigest()))
             complete= 1
         else:
             pwd= getpass.getpass("The passswords didn't match. Try again. ")

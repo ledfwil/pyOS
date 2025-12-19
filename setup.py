@@ -8,6 +8,7 @@ from time import sleep
 from re import sub
 import getpass
 from base64 import b64encode
+from hashlib import sha256
 #Function Definition
 #Directory Verification
 def verify(dir):
@@ -99,8 +100,10 @@ def Setup():
     chdir(dpath)
     chdir('UserDB')
     users= open('users.txt', 'w')
-    users.write('admin' + '\n' + str(b64encode(bytes(apwd, "utf-8"))))
-    users.write(usrnm + '\n' + str(b64encode(bytes(pwd, "utf-8"))))
+    bapwd= sha256(b64encode(bytes(apwd, "utf-8")))
+    bpwd= sha256(b64encode(bytes(pwd, "utf-8")))
+    users.write('admin' + '\n' + str(bapwd.hexdigest()))
+    users.write(usrnm + '\n' + str(bpwd.hexdigest()))
     users.close()
     system('cls')
     header()

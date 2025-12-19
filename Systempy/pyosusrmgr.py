@@ -5,6 +5,7 @@ from os import rename
 from os import remove
 from os import system
 from base64 import b64encode
+from hashlib import sha256
 import getpass
 #Funciton Definition
 def sudochk(usr, sudoers):
@@ -42,9 +43,9 @@ def usradd(sudoers, userdb):
 def pwdchk(pwd, cpwd, usr, userdb):
     while True:
         if pwd == cpwd:
-            bpwd = b64encode(pwd.encode())
+            bpwd = sha256(b64encode(pwd.encode()))
             usrdb.write('\n' + usr + '\n')
-            usrdb.write(str(bpwd))
+            usrdb.write(str(bpwd.hexdigest()))
             pass
             break
         else:
@@ -93,7 +94,8 @@ def chgpwd(ausr):
         cpwd= getpass.getpass('Confirm it: ')
         pwdchk(pwd, cpwd, adusr)
         tmp.write(adusr + '\n' )
-        tmp.write(b64.encode(pwd))
+        bpwd= sha256(b64.encode(pwd))
+        tmp.write(str(bpwd.hexdigest()))
         print('Password changed sucessfully!')
         tmp.close()
         users.close()
